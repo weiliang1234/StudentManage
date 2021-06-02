@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booy.ssm.exam.dao.TeacherMapper">
+  <resultMap id="BaseResultMap" type="com.booy.ssm.exam.pojo.Teacher">
+    <id column="JobNumber" jdbcType="INTEGER" property="jobnumber" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="Sex" jdbcType="VARCHAR" property="sex" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Department" jdbcType="VARCHAR" property="department" />
+    <result column="Position" jdbcType="VARCHAR" property="position" />
+    <result column="education" jdbcType="VARCHAR" property="education" />
+    <result column="NativePlace" jdbcType="VARCHAR" property="nativeplace" />
+    <result column="AdmissionDate" jdbcType="DATE" property="admissiondate" />
+    <result column="Age" jdbcType="INTEGER" property="age" />
+    <result column="ID" jdbcType="INTEGER" property="id" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    JobNumber, Name, Sex, Phone, Department, Position, education, NativePlace, AdmissionDate, 
+    Age
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from teacher
+    where JobNumber = #{jobnumber,jdbcType=INTEGER}
+  </select>
+  <select id="getTeacherList" resultType="com.booy.ssm.exam.pojo.Teacher">
+    select * from teacher
+    <where>
+      <if test="jobnumber !=null and jobnumber!=''">and jobnumber like concat('%',#{jobnumber},'%')</if>
+      <if test="department !=null and department!=''">and department like concat('%',#{department},'%')</if>
+      <if test="name !=null and name!=''">
+        <bind name="temp" value="'%'+name+'%'"/>
+        and name like #{temp}
+      </if>
+    </where>
+  </select>
+  <select id="selectByPrimaryID" parameterType="java.lang.Integer" resultType="com.booy.ssm.exam.pojo.Teacher">
+    select * from teacher where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getTeacherByAccount" parameterType="java.lang.Integer" resultType="com.booy.ssm.exam.pojo.TeacherLogin">
+    select * from teacher_login where JobNumber = #{jobnumber,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  delete from teacher
+  where JobNumber = #{jobnumber,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.booy.ssm.exam.pojo.Teacher">
+    insert into teacher (JobNumber, Name, Sex, 
+      Phone, Department, Position, 
+      education, NativePlace, AdmissionDate, 
+      Age)
+    values (#{jobnumber,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
+      #{education,jdbcType=VARCHAR}, #{nativeplace,jdbcType=VARCHAR}, #{admissiondate,jdbcType=DATE}, 
+      #{age,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.booy.ssm.exam.pojo.Teacher">
+    insert into teacher
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobnumber != null">
+        JobNumber,
+      </if>
+      <if test="name != null">
+        Name,
+      </if>
+      <if test="sex != null">
+        Sex,
+      </if>
+      <if test="phone != null">
+        Phone,
+      </if>
+      <if test="department != null">
+        Department,
+      </if>
+      <if test="position != null">
+        Position,
+      </if>
+      <if test="education != null">
+        education,
+      </if>
+      <if test="nativeplace != null">
+        NativePlace,
+      </if>
+      <if test="admissiondate != null">
+        AdmissionDate,
+      </if>
+      <if test="teachingcourses != null">
+        Age,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jobnumber != null">
+        #{jobnumber,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeplace != null">
+        #{nativeplace,jdbcType=VARCHAR},
+      </if>
+      <if test="admissiondate != null">
+        #{admissiondate,jdbcType=DATE},
+      </if>
+      <if test="teachingcourses != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertTeacherLogin" parameterType="com.booy.ssm.exam.pojo.TeacherLogin">
+    insert into teacher_login (JobNumber,name,password,flag,salt)
+    values
+    (#{jobnumber,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{flag,jdbcType=INTEGER},#{salt,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.booy.ssm.exam.pojo.Teacher">
+    update teacher
+    <set>
+      <if test="name != null">
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        Sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        Department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        Position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        education = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeplace != null">
+        NativePlace = #{nativeplace,jdbcType=VARCHAR},
+      </if>
+      <if test="admissiondate != null">
+        AdmissionDate = #{admissiondate,jdbcType=DATE},
+      </if>
+      <if test="age != null">
+        Age = #{age,jdbcType=INTEGER},
+      </if>
+    </set>
+    where JobNumber = #{jobnumber,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.booy.ssm.exam.pojo.Teacher">
+    update teacher
+    set Name = #{name,jdbcType=VARCHAR},
+      Sex = #{sex,jdbcType=VARCHAR},
+      Phone = #{phone,jdbcType=VARCHAR},
+      Department = #{department,jdbcType=VARCHAR},
+      Position = #{position,jdbcType=VARCHAR},
+      education = #{education,jdbcType=VARCHAR},
+      NativePlace = #{nativeplace,jdbcType=VARCHAR},
+      AdmissionDate = #{admissiondate,jdbcType=DATE},
+      Age = #{age,jdbcType=INTEGER}
+    where JobNumber = #{jobnumber,jdbcType=INTEGER}
+  </update>
+  <update id="updateTeacher" parameterType="com.booy.ssm.exam.pojo.Teacher">
+    update teacher
+    <set>
+      <if test="jobnumber != null">
+        JobNumber = #{jobnumber,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        Sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        Department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        Position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        education = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeplace != null">
+        NativePlace = #{nativeplace,jdbcType=VARCHAR},
+      </if>
+      <if test="admissiondate != null">
+        AdmissionDate = #{admissiondate,jdbcType=DATE},
+      </if>
+      <if test="age != null">
+        Age = #{age,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
